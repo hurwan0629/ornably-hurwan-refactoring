@@ -1,0 +1,93 @@
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor and IDE files
+.idea/
+.vscode/
+*.iws
+*.iml
+*.ipr
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment and local config
+.env
+.env.*
+!.env.example
+!.env.*.example
+application-local.yml
+application-local.yaml
+application-local.properties
+
+# Java / Spring Boot / Maven
+HELP.md
+target/
+build/
+*.class
+*.war
+*.jar
+*.ear
+*.nar
+*.log
+.mvn/wrapper/maven-wrapper.jar
+
+# Keep nested source directories named target/build if any exist
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Eclipse / STS
+.apt_generated/
+.apt_generated_tests/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Node / React / Vite
+node_modules/
+.pnp/
+.pnp.js
+coverage/
+.cache/
+.eslintcache
+*.tsbuildinfo
+.vite/
+.next/
+
+# Package manager caches
+.npm/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnpm-store/
+
+# Docker / runtime data
+*.pid
+*.seed
+*.pid.lock
+ornably/docker/data/
+ornably/resource/images/
+application.properties
+application-*.properties
