@@ -4,6 +4,8 @@ CREATE DATABASE IF NOT EXISTS ornably_db
 
 USE ornably_db;
 
+SET NAMES utf8mb4;
+
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS connect_log;
 DROP TABLE IF EXISTS orders_item;
@@ -25,7 +27,7 @@ CREATE TABLE account (
   account_email VARCHAR(255) NULL,
   account_phone VARCHAR(30) NULL,
   account_date DATE NOT NULL DEFAULT (CURRENT_DATE),
-  account_role VARCHAR(30) NOT NULL DEFAULT 'LOCAL',
+  account_role VARCHAR(30) NOT NULL DEFAULT 'LOCAL', -- ['LOCAL', 'GOOGLE', 'KAKAO', 'NAVER', 'ONBOARD', 'ADMIN']
   account_event_opt_in BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (account_pk),
   UNIQUE KEY uk_account_id (account_id),
@@ -56,7 +58,25 @@ CREATE TABLE event (
   event_start_date DATE NOT NULL,
   event_end_date DATE NOT NULL,
   event_target_account JSON NOT NULL,
-  event_target_category JSON NOT NULL,
+    -- 1. 전체 사용자 이벤트
+    -- { "type": "ALL" }
+    -- 2. N원 이상 구매 사용자
+    -- {
+    --   "type": "AMOUNT",
+    --   "amount": 50000
+    -- }
+    -- 2. 특정 날짜 범위 회원가입 사용자 이벤트
+    -- {
+    --   "type": "JOINED",
+    --   "startDate": "2025-12-01",
+    --   "endDate": "2025-12-31"
+    -- }
+    -- 4. 특정 유형 회원
+    -- {
+    --   "type": "MEMBER_TYPE",
+    --   "memberType": ["LOCAL", "GOOGLE", "KAKAO", "NAVER"]
+    -- }
+  event_target_category JSON NOT NULL, -- ["TREE", "LIGHT", "BALL", "FIGURE", "WREATHS", "ETC"]
   event_discount_rate INT NOT NULL DEFAULT 0,
   event_description TEXT NULL,
   PRIMARY KEY (event_pk),

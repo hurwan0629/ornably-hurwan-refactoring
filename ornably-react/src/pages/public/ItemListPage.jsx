@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import axios from "axios";
+import ornablyAPI from "../../lib/api";
 import Container from "../../components/common/Container";
 import { useAuth } from "../../auth/AuthContext"; // ✅ 프로젝트에 맞게 경로 조정
-
-const API_BASE = import.meta.env?.VITE_API_BASE_URL ?? "http://localhost:8088";
 
 /* ===================== utils ===================== */
 function cx(...classes) {
@@ -286,14 +284,6 @@ export default function ItemListPage() {
   const { type } = useParams()
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const http = useMemo(() => {
-    return axios.create({
-      baseURL: API_BASE,
-      timeout: 7000,
-      withCredentials: true,
-    });
-  }, []);
-
   // query state
   const SORT_TYPES = new Set(["new", "popular","discount"]);
 
@@ -369,7 +359,7 @@ export default function ItemListPage() {
     setErrorText("");
 
     try {
-      const res = await http.get("/api/all/item", {
+      const res = await ornablyAPI.get("/api/all/item", {
         params: {
           search: search || "",
           category: category === "all" ? ["all"] : [category],
@@ -419,7 +409,7 @@ export default function ItemListPage() {
   const requestWishlistPost = async (itemPk) => {
     if (!isUser) return openLoginModal("찜 기능은 로그인한 사용자만 이용할 수 있어요.");
     try {
-      await http.post(`/api/user/wishlist/${itemPk}`);
+      await ornablyAPI.post(`/api/user/wishlist/${itemPk}`);
       openInfoModal("찜 완료", "찜 목록에 추가했어요.");
     } catch (err) {
       openInfoModal("요청 실패", getApiErrorMessage(err));
@@ -430,7 +420,7 @@ export default function ItemListPage() {
   const requestAddCartOne = async (itemPk) => {
     if (!isUser) return openLoginModal("장바구니 기능은 로그인한 사용자만 이용할 수 있어요.");
     try {
-      await http.post("/api/user/cart", { itemPk, cartCount: 1 });
+      await ornablyAPI.post("/api/user/cart", { itemPk, cartCount: 1 });
       openInfoModal("장바구니 담기", "장바구니에 1개 담았어요.");
     } catch (err) {
       openInfoModal("요청 실패", getApiErrorMessage(err));

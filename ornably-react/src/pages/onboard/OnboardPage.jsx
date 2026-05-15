@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Container from "../../components/common/Container";
 import { useAuth } from "../../auth/AuthContext"; // 프로젝트 경로에 맞게 유지
-import ornablyAPI from "../../lib/api"
+import ornablyAPI, { API_BASE_URL } from "../../lib/api"
 
 function normalizePhone11(v) {
   return String(v || "").replace(/[^\d]/g, "").slice(0, 11);
@@ -139,7 +139,7 @@ export default function OnboardPage() {
 
   const handleCancelSocial = () => {
     // 요구사항 그대로: 소셜 로그인 그만두기
-    window.location.href = `http://localhost:8088/logout`;
+    window.location.href = `${API_BASE_URL}/logout`;
   };
 
   const loadOnboardBase = async () => {
@@ -563,7 +563,7 @@ export default function OnboardPage() {
             className="absolute inset-0 bg-black/40"
             onClick={() => {
               setSuccessOpen(false);
-              window.location.href = `http://localhost:8088/logout`;
+              window.location.href = `${API_BASE_URL}/logout`;
             }}
           />
 
@@ -581,7 +581,7 @@ export default function OnboardPage() {
                 type="button"
                 onClick={() => {
                   setSuccessOpen(false);
-                  window.location.href = `http://localhost:8088/logout`;
+                  window.location.href = `${API_BASE_URL}/logout`;
                 }}
                 className="h-11 w-full rounded-2xl bg-black px-4 text-sm font-semibold text-white hover:bg-gray-900"
               >

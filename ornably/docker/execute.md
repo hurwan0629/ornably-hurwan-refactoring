@@ -1,40 +1,40 @@
-# Docker 실행 구조
+﻿# Docker ?ㅽ뻾 援ъ“
 
-## 전체 트리
+## ?꾩껜 ?몃━
 
 ```text
 docker/
 |-- dev/
 |   `-- docker-compose.yml
-|       |-- MySQL + Redis만 실행
-|       |-- MySQL 포트 고정: 3306:3306
-|       |-- Redis 포트 고정: 6379:6379
-|       `-- Spring Boot 앱은 로컬에서 실행
+|       |-- MySQL + Redis留??ㅽ뻾
+|       |-- MySQL ?ы듃 怨좎젙: 3306:3306
+|       |-- Redis ?ы듃 怨좎젙: 6379:6379
+|       `-- Spring Boot ?깆? 濡쒖뺄?먯꽌 ?ㅽ뻾
 |
 `-- auto/
     |-- docker-compose.yml
-    |   |-- MySQL + Redis + App 실행
+    |   |-- MySQL + Redis + App ?ㅽ뻾
     |   |-- app.env_file=.env.docker
-    |   `-- app 컨테이너는 .env.docker 값을 Spring properties에 주입
+    |   `-- app 而⑦뀒?대꼫??.env.docker 媛믪쓣 Spring properties??二쇱엯
     |
     |-- docker-compose.override.yml
-    |   |-- docker compose 실행 시 자동 병합
-    |   |-- .env 값을 사용해 MySQL 계정/root password 치환
-    |   |-- MySQL 포트 공개: 3306:3306
-    |   |-- Redis 포트 공개: 6379:6379
-    |   `-- App 포트 공개: 8088:8080
+    |   |-- docker compose ?ㅽ뻾 ???먮룞 蹂묓빀
+    |   |-- .env 媛믪쓣 ?ъ슜??MySQL 怨꾩젙/root password 移섑솚
+    |   |-- MySQL ?ы듃 怨듦컻: 3306:3306
+    |   |-- Redis ?ы듃 怨듦컻: 6379:6379
+    |   `-- App ?ы듃 怨듦컻: 8088:8080
     |
     |-- .env
-    |   `-- docker-compose.yml / override.yml의 ${...} 치환용
+    |   `-- docker-compose.yml / override.yml??${...} 移섑솚??
     |
     `-- .env.docker
-        `-- app 컨테이너 환경변수 주입용
+        `-- app 而⑦뀒?대꼫 ?섍꼍蹂??二쇱엯??
 ```
 
-## dev + 로컬 실행
+## dev + 濡쒖뺄 ?ㅽ뻾
 
 ```text
-실행 흐름
+?ㅽ뻾 ?먮쫫
 `-- docker/dev/docker-compose.yml
     |-- mysql
     |   |-- MYSQL_USER=kevin
@@ -42,29 +42,29 @@ docker/
     |   |-- MYSQL_ROOT_PASSWORD=root1234
     |   |-- MYSQL_DATABASE=ornably_db
     |   |-- 3306:3306
-    |   `-- docker/data가 비어 있으면 schema.sql, sample.sql 자동 실행
+    |   `-- docker/data媛 鍮꾩뼱 ?덉쑝硫?1_schema.sql, 2_sample.sql ?먮룞 ?ㅽ뻾
     |
     `-- redis
         `-- 6379:6379
 
-로컬 Spring
+濡쒖뺄 Spring
 `-- application.properties
     `-- spring.profiles.default=dev
         `-- application-dev.properties
             |-- DB: localhost:3306/ornably_db
-            |-- DB user/password 기본값: kevin / kevin1234
+            |-- DB user/password 湲곕낯媛? kevin / kevin1234
             `-- Redis: localhost:6379
 ```
 
-## auto 전체 Docker 실행
+## auto ?꾩껜 Docker ?ㅽ뻾
 
 ```text
-compose 병합 흐름
+compose 蹂묓빀 ?먮쫫
 `-- docker/auto/docker-compose.yml
     `-- docker/auto/docker-compose.override.yml
-        `-- 두 파일이 같은 서비스 이름 기준으로 병합됨
+        `-- ???뚯씪??媛숈? ?쒕퉬???대쫫 湲곗??쇰줈 蹂묓빀??
 
-MySQL 환경변수
+MySQL ?섍꼍蹂??
 `-- docker/auto/.env
     |-- DB_ROOT_PASSWORD
     |   `-- MYSQL_ROOT_PASSWORD
@@ -75,10 +75,10 @@ MySQL 환경변수
     `-- ORNABLY_DB_PASSWORD
         `-- MYSQL_PASSWORD
 
-App 환경변수
+App ?섍꼍蹂??
 `-- docker/auto/.env.docker
     |-- SPRING_PROFILES_ACTIVE=docker
-    |   `-- application-docker.properties 사용
+    |   `-- application-docker.properties ?ъ슜
     |
     |-- DB_USERNAME
     |   `-- spring.datasource.username
@@ -87,7 +87,7 @@ App 환경변수
     |   `-- spring.datasource.password
     |
     |-- DB_OPTIONS
-    |   `-- spring.datasource.url의 query option
+    |   `-- spring.datasource.url??query option
     |
     |-- SERVER_ORIGIN
     |   `-- server.origin
@@ -96,43 +96,43 @@ App 환경변수
         `-- resource.path
 
 application-docker.properties
-`-- app 컨테이너 내부 Spring 설정
+`-- app 而⑦뀒?대꼫 ?대? Spring ?ㅼ젙
     |-- DB: mysql:3306/ornably_db
     |-- Redis: redis:6379
-    `-- DB 계정: .env.docker의 DB_USERNAME / DB_PASSWORD
+    `-- DB 怨꾩젙: .env.docker??DB_USERNAME / DB_PASSWORD
 ```
 
-## DB 초기화
+## DB 珥덇린??
 
 ```text
-docker/data 비어 있음
-`-- MySQL 최초 시작
-    |-- schema.sql 실행
-    |   `-- ornably_db 생성 및 테이블 생성
+docker/data 鍮꾩뼱 ?덉쓬
+`-- MySQL 理쒖큹 ?쒖옉
+    |-- 1_schema.sql ?ㅽ뻾
+    |   `-- ornably_db ?앹꽦 諛??뚯씠釉??앹꽦
     |
-    `-- sample.sql 실행
-        `-- 초기 데이터 insert
+    `-- 2_sample.sql ?ㅽ뻾
+        `-- 珥덇린 ?곗씠??insert
 
-docker/data 이미 존재
-`-- schema.sql / sample.sql 자동 재실행 안 됨
+docker/data ?대? 議댁옱
+`-- 1_schema.sql / 2_sample.sql ?먮룞 ?ъ떎??????
 ```
 
-## 핵심 주의사항
+## ?듭떖 二쇱쓽?ы빆
 
 ```text
 .env
-`-- compose 파일의 ${...} 치환용
-    `-- app 컨테이너에 자동 주입되는 파일 아님
+`-- compose ?뚯씪??${...} 移섑솚??
+    `-- app 而⑦뀒?대꼫???먮룞 二쇱엯?섎뒗 ?뚯씪 ?꾨떂
 
 .env.docker
-`-- app 컨테이너 env_file
-    `-- Spring의 ${...} properties 값으로 사용됨
+`-- app 而⑦뀒?대꼫 env_file
+    `-- Spring??${...} properties 媛믪쑝濡??ъ슜??
 
 MYSQL_DATABASE=ornably_db
-`-- MySQL 최초 생성 DB 이름
-    `-- app 접속 URL은 application-docker.properties가 결정
+`-- MySQL 理쒖큹 ?앹꽦 DB ?대쫫
+    `-- app ?묒냽 URL? application-docker.properties媛 寃곗젙
 
-계정 정합성
+怨꾩젙 ?뺥빀??
 |-- .env: ORNABLY_DB_USER == .env.docker: DB_USERNAME
 `-- .env: ORNABLY_DB_PASSWORD == .env.docker: DB_PASSWORD
 ```

@@ -1,5 +1,6 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { LogOut, Shield, Home } from "lucide-react";
+import { API_BASE_URL } from "../../lib/api";
 
 function cx(...c) {
   return c.filter(Boolean).join(" ");
@@ -10,7 +11,7 @@ export default function AdminHeader() {
 
   const onLogout = () => {
     // 서버 로그아웃 엔드포인트를 쓰는 기존 패턴 유지
-    window.location.href = "http://localhost:8088/logout";
+    window.location.href = `${API_BASE_URL}/logout`;
   };
 
   return (

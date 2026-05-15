@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import axios from 'axios';
+import ornablyAPI from "../lib/api";
 
 // 상태 저장 + /me 로드
 
@@ -21,9 +21,7 @@ export function AuthProvider({ children }) {
     console.log("loadMe() 호출");
     setStatus("loading");
     try {
-      const res = await axios.get("http://localhost:8088/api/all/auth/info", {
-        withCredentials: true,
-      });
+      const res = await ornablyAPI.get("/api/all/auth/info");
       // res.data 예: { authenticated: true, role: "USER", ... }
       console.log("/api/me 응답:");
       console.log(res);
@@ -46,7 +44,7 @@ export function AuthProvider({ children }) {
 
   // 401/403 발생 시 상태 정리(선택)
   useEffect(() => {
-    const id = axios.interceptors.response.use(
+    const id = ornablyAPI.interceptors.response.use(
       (res) => res,
       async (err) => {
         const code = err?.response?.status;
@@ -59,7 +57,7 @@ export function AuthProvider({ children }) {
       }
     );
 
-    return () => axios.interceptors.response.eject(id);
+    return () => ornablyAPI.interceptors.response.eject(id);
   }, []);
   
   const value = useMemo(

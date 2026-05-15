@@ -1,7 +1,7 @@
 // src/pages/admin/AdminItemManagePage.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ornablyAPI from "../../lib/api";
+import ornablyAPI, { API_BASE_URL } from "../../lib/api";
 import { ArrowLeft, Upload, RefreshCw, Pencil, Save, Plus, Image as ImageIcon } from "lucide-react";
 
 /* ===================== utils ===================== */
@@ -32,13 +32,11 @@ function clampInt(n, min, max) {
   return Math.max(min, Math.min(max, Math.trunc(x)));
 }
 
-const API_BASE = import.meta.env?.VITE_API_BASE_URL ?? "http://localhost:8088";
-
 function makeImageUrl(url) {
   const s = String(url ?? "").trim();
   if (!s) return "";
   if (s.startsWith("http://") || s.startsWith("https://")) return s;
-  return s.startsWith("/") ? `${API_BASE}${s}` : `${API_BASE}/${s}`;
+  return s.startsWith("/") ? `${API_BASE_URL}${s}` : `${API_BASE_URL}/${s}`;
 }
 
 /* ===================== constants ===================== */

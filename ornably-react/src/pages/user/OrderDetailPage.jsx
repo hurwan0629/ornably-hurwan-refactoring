@@ -1,10 +1,8 @@
 ﻿// src/pages/user/OrderDetailPage.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import ornablyAPI from "../../lib/api";
 import Container from "../../components/common/Container";
-
-const API_BASE = import.meta.env?.VITE_API_BASE_URL ?? "http://localhost:8088";
 
 /* ===================== utils ===================== */
 function cx(...classes) {
@@ -213,8 +211,7 @@ export default function OrderDetailPage() {
     setLoading(true);
     setErrMsg("");
     try {
-      const res = await axios.get(`${API_BASE}/api/user/orders-item/me`, {
-        withCredentials: true,
+      const res = await ornablyAPI.get("/api/user/orders-item/me", {
         params: { ordersPk: pk },
       });
 

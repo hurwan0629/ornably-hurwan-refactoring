@@ -1,9 +1,7 @@
 ﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import ornablyAPI from "../../lib/api";
 import { useAuth } from "../../auth/AuthContext";
-
-const API_BASE = import.meta.env?.VITE_API_BASE_URL ?? "http://localhost:8088";
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
@@ -42,14 +40,14 @@ export default function AdminLoginPage() {
     try {
       setLoading(true);
 
-      await axios.post(
-        `${API_BASE}/login`,
+      await ornablyAPI.post(
+        "/login",
         new URLSearchParams({
           username: form.accountId,     // 🔥 Spring Security 기본 키
           password: form.accountPassword,
         }),
         {
-          withCredentials: true,
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
         }
       );
       console.log("로그인 성공");

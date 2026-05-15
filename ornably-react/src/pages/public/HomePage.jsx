@@ -1,12 +1,9 @@
 // src/pages/public/HomePage.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Container from "../../components/common/Container";
 import { useAuth } from "../../auth/AuthContext"
 import ornablyAPI from "../../lib/api";
-
-const API = "http://localhost:8088";
 
 /* ===================== utils ===================== */
 function formatPriceKRW(n) {

@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import ornablyAPI from "../../lib/api";
 import Container from "../../components/common/Container";
 
-const API = "http://localhost:8088";
-
 /* ===================== utils ===================== */
 function getApiErrorMessage(err) {
   return (

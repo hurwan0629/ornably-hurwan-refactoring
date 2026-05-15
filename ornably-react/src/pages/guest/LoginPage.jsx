@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Container from "../../components/common/Container";
 import { useAuth } from "../../auth/AuthContext";
-import { getErrorInfo, getApiMessage } from "../../lib/error";
-import axios from "axios";
+import { getErrorInfo } from "../../lib/error";
+import ornablyAPI, { API_BASE_URL } from "../../lib/api";
 import ornably from "../../../images/ornably.png";
 
 export default function LoginPage() {
@@ -43,8 +43,7 @@ export default function LoginPage() {
       body.append("username", username);
       body.append("password", password);
 
-      await axios.post(`http://localhost:8088/login`, body, {
-        withCredentials: true,
+      await ornablyAPI.post("/login", body, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
 
@@ -67,7 +66,7 @@ export default function LoginPage() {
 
   const startOAuth = (provider) => {
     // Spring Security 기본 OAuth2 시작 URL
-    window.location.href = `http://localhost:8088/oauth2/authorization/${provider}`;
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/${provider}`;
   };
 
   return (

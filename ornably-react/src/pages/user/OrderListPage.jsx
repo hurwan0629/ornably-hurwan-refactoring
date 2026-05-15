@@ -1,10 +1,8 @@
 ﻿// src/pages/user/OrderListPage.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import ornablyAPI from "../../lib/api";
 import Container from "../../components/common/Container";
-
-const API = "http://localhost:8088";
 
 /* ===================== utils ===================== */
 function formatDateYYYYMMDD(s) {
@@ -91,9 +89,7 @@ export default function OrderListPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get(`${API}/api/user/orders/me`, {
-        withCredentials: true,
-      });
+      const res = await ornablyAPI.get("/api/user/orders/me");
       setOrders(res?.data?.ordersDatas ?? []);
     } catch (err) {
       setOrders([]);

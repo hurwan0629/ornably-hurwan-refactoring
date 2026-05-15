@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext"; // 프로젝트 경로에 맞게 수정
 import ConfirmModal from "../../components/common/ConfirmModal";
 import ornablyAPI from "../../lib/api";
-import axios from "axios";
 
 
 function getApiErrorMessage(e, fallback) {
@@ -390,7 +389,7 @@ export default function WithdrawPage() {
         
           // ✅ 2) 그 다음 auth 상태 갱신 (세션 만료/삭제 반영)
           setTimeout(() => {
-            axios.post("http://localhost:8088/logout", {}, { withCredentials: true })
+            ornablyAPI.post("/logout")
             .finally(() => {
               loadMe(); // 로컬 auth 상태 정리
             });

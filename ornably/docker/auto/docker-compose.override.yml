@@ -17,8 +17,13 @@ services:
       - --default-time-zone=+09:00
     volumes:
       - ../data:/var/lib/mysql
-      - ../../src/main/resources/SQL/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
-      - ../../src/main/resources/SQL/sample.sql:/docker-entrypoint-initdb.d/02-sample-data.sql:ro
+      - ../../src/main/resources/SQL/1_schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ../../src/main/resources/SQL/2_sample.sql:/docker-entrypoint-initdb.d/02-sample-data.sql:ro
+      - ../../src/main/resources/SQL/3_account_sample.sql:/docker-entrypoint-initdb.d/03-account-sample.sql:ro
+      - ../../src/main/resources/SQL/4_item_sample.sql:/docker-entrypoint-initdb.d/04-item-sample.sql:ro
+      - ../../src/main/resources/SQL/5_event_sample.sql:/docker-entrypoint-initdb.d/05-event-sample.sql:ro
+      - ../../src/main/resources/SQL/6_order_sample.sql:/docker-entrypoint-initdb.d/06-order-sample.sql:ro
+      - ../../src/main/resources/SQL/7_user_item_sample.sql:/docker-entrypoint-initdb.d/07-user-item-sample.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
       interval: 10s
@@ -40,7 +45,7 @@ services:
       retries: 10
 
   app:
-    image: hurwan0629/ornably-hurwan:latest
+    image: hurwan0629/ornably-hurwan:1.0
     build:
       context: ../../
       dockerfile: Dockerfile

@@ -22,8 +22,12 @@ public class BrevoService {
     @Value("${brevo.sender.email}")
     private String senderEmail;
 
-    @Value("${brevo.sender.name:Ornably}")
+    @Value("${brevo.sender.name}")
     private String senderName;
+
+    @Value("${frontend.origin}")
+    private String frontendOrigin;
+
 
     /** 이벤트 등록 테스트 메일 */ // SELECT_ACCOUNT_EMAIL_EVENT_OPTIN
     public void sendEventInsertMail(EventDTO eventDTO) {     
@@ -71,7 +75,7 @@ public class BrevoService {
 
                // 버튼
                + "<div style='text-align:center;margin-top:25px;'>"
-               + "<a href='http://localhost:5173/' "
+               + "<a href='+" + frontendOrigin + "' "
                + "style='background-color:#8E44AD;color:white;padding:12px 25px;"
                + "text-decoration:none;border-radius:8px;font-weight:bold;'>"
                + "이벤트 보러가기"

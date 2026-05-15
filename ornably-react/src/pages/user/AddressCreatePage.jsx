@@ -1,9 +1,7 @@
 ﻿import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import ornablyAPI from "../../lib/api";
 import Container from "../../components/common/Container";
-
-const API_BASE = import.meta.env?.VITE_API_BASE_URL ?? "http://localhost:8088";
 
 function cx(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -102,15 +100,14 @@ export default function AddressCreatePage() {
 
     setLoading(true);
     try {
-      await axios.post(
-        `${API_BASE}/api/user/address/regist`,
+      await ornablyAPI.post(
+        "/api/user/address/regist",
         {
           addressName: form.addressName.trim(),
           addressPostalCode: form.addressPostalCode.trim(),
           addressRegion: form.addressRegion.trim(),
           addressDetail: form.addressDetail.trim(),
-        },
-        { withCredentials: true }
+        }
       );
 
       setOkMsg("배송지가 등록되었습니다.");

@@ -2,6 +2,7 @@ package bugsandwich.ornably.security;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -34,6 +35,8 @@ public class SecurityConfig {
 	//로그인 성공후 (일반/소셜) 무엇을 응답할지 결정한다 권한에 따라 다음 경로를 내려주거나 리다이렉트 할수있다
 	//로그인 실패후 상태에 따라 에러코드 띄워줌
 	
+	@Value("${frontend.origin}")
+	private String frontendOrigin;
 
 	//DI 생성자 주입 사용
 	public SecurityConfig(CustomOAuth2UserService customOAuth2UserService,
@@ -57,7 +60,7 @@ public class SecurityConfig {
 		CorsConfiguration config = new CorsConfiguration();
 
 		//허용할 프론트 개발서버 주소
-		config.setAllowedOrigins(List.of("http://localhost:5173"));
+		config.setAllowedOrigins(List.of(frontendOrigin));
 		//프론트에서 사용할 HTTP메서드 허용하기
 		config.setAllowedMethods(List.of("*"));
 		//프론트가 보내는 헤더 허용하기
@@ -143,7 +146,7 @@ public class SecurityConfig {
 						.userService(customOAuth2UserService))
 				// OAuth2 로그인 성공 시 권한에 따라 상태분기
 				.successHandler((req, res, auth) -> {
-	                   res.sendRedirect("http://localhost:5173/");
+	                   res.sendRedirect(frontendOrigin);
 	              })
 				)
 
@@ -155,7 +158,7 @@ public class SecurityConfig {
 				.invalidateHttpSession(true) // 세션무효화
 				.clearAuthentication(true) //인증정보 제거
 				.deleteCookies("JSESSIONID") // 세션 식별에 사용되는 JSESSIONID 쿠키 삭제
-				.logoutSuccessUrl("http://localhost:5173/"));
+				.logoutSuccessUrl(frontendOrigin));
 
 		// 설정이 완료된 SecurityFilterChain 반환
 		return http.build();

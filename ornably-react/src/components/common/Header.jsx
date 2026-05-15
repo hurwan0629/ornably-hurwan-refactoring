@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import { useMemo } from "react";
 import logo from "../../../images/logo.png";
+import { API_BASE_URL } from "../../lib/api";
 
 import { Heart, ShoppingBag, LogOut } from "lucide-react";
 
@@ -31,7 +32,7 @@ export default function Header() {
   );
 
   const onLogout = () => {
-    window.location.href = "http://localhost:8088/logout";
+    window.location.href = `${API_BASE_URL}/logout`;
   };
 
   return (

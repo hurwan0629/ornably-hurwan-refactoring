@@ -1,7 +1,6 @@
 ﻿// src/pages/user/WishlistPage.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Container from "../../components/common/Container";
 import ornablyAPI from "../../lib/api";
 import { getApiMessage } from "../../lib/error";

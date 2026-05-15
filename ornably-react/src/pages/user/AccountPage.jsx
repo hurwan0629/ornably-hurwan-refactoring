@@ -3,11 +3,9 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiHeart, FiShoppingCart, FiStar, FiList, FiMapPin, FiLogOut} from "react-icons/fi";
 
-import axios from "axios";
 import Container from "../../components/common/Container";
 import { useAuth } from "../../auth/AuthContext"
-
-const API = "http://localhost:8088";
+import ornablyAPI from "../../lib/api";
 
 /* ===================== utils ===================== */
 function formatDateYYYYMMDD(s) {
@@ -129,9 +127,7 @@ export default function AccountPage() {
     setLoading(true);
     setErrorMsg("");
     try {
-      const res = await axios.get(`${API}/api/user/account/mypage`, {
-        withCredentials: true,
-      });
+      const res = await ornablyAPI.get("/api/user/account/mypage");
       setAccount(res?.data?.accountData ?? null);
     } catch (err) {
       setAccount(null);

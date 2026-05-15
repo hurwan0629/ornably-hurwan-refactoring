@@ -1,8 +1,8 @@
 ﻿// src/pages/user/CheckoutPage.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { getApiMessage } from "../../lib/error";
+import ornablyAPI from "../../lib/api";
+
 const storeId = import.meta.env.VITE_PORTONE_STORE_ID;
 const channelKey = import.meta.env.VITE_PORTONE_CHANNEL_KEY;
 
@@ -98,9 +98,7 @@ export default function CheckoutPage() {
         setAddrStatus("loading");
         setErrorMsg("");
 
-        const res = await axios.get("http://localhost:8088/api/user/address/me", {
-          withCredentials: true,
-        });
+        const res = await ornablyAPI.get("/api/user/address/me");
 
         const list = res.data?.addressDatas ?? [];
         if (!alive) return;
@@ -198,21 +196,21 @@ export default function CheckoutPage() {
 
       // 백엔드 주문 확정
       if (source === "cart") {
-        await axios.post("http://localhost:8088/api/user/orders/cart-payment", {
+        await ornablyAPI.post("/api/user/orders/cart-payment", {
           addressPk: selectedAddressPk,
           ordersImportUid,
           ordersMessage,
-        }, { withCredentials: true });
+        });
       } else {
         console.log(summary?.rows[0]?.unit);
-        await axios.post("http://localhost:8088/api/user/orders/instance-payment", {
+        await ornablyAPI.post("/api/user/orders/instance-payment", {
           itemPk: instanceItem?.itemPk,
           itemCount: instanceItem?.itemCount,
           itemPrice: summary?.rows[0]?.unit,
           addressPk: selectedAddressPk,
           ordersImportUid,
           ordersMessage,
-        }, { withCredentials: true });
+        });
       }
 
       success = true;

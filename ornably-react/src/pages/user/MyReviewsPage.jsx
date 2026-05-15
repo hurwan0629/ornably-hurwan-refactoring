@@ -4,9 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Container from "../../components/common/Container";
 import ornablyAPI from "../../lib/api";
 
-
-const API_BASE = import.meta.env?.VITE_API_BASE_URL ?? "http://localhost:8088";
-
 /* ===================== utils ===================== */
 function cx(...classes) {
   return classes.filter(Boolean).join(" ");
