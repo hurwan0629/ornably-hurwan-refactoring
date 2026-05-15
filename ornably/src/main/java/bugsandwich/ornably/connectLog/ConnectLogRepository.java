@@ -17,7 +17,7 @@ public class ConnectLogRepository {
 		System.out.println("[로그] ConnectLogRepository의 selectAll 시작");
 		
 		// 특정 사용자 로그 전체 조회
-		List<ConnectLogDTO> list = sqlSession.selectList(NAMESPACE + "getList", connectLogDTO);
+		List<ConnectLogDTO> list = sqlSession.selectList(NAMESPACE + "selectAll", connectLogDTO);
 		System.out.println("[로그] selectAll count = " + list.size());
 		
 		// selectList() : 조회 결과가 없으면 빈 리스트 반환
@@ -28,7 +28,7 @@ public class ConnectLogRepository {
 	    System.out.println("[로그] ConnectLogRepository selectOne 시작");
 
 	    // 특정 사용자 로그 최신 접속 한 건 조회
-	    ConnectLogDTO result = sqlSession.selectOne(NAMESPACE + "getOne", connectLogDTO);
+	    ConnectLogDTO result = sqlSession.selectOne(NAMESPACE + "selectOne", connectLogDTO);
 	    if (result != null) {
 	        System.out.println("[로그] selectOne 성공");
 	    } 

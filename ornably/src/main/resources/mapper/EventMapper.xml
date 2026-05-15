@@ -2,59 +2,59 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
+
   <mapper namespace="EventLog">
-  	
-  	<!-- 이벤트 등록 -->
-  	<insert id="insert" parameterType="bugsandwich.ornably.event.EventDTO">
-  		INSERT INTO EVENT
-        (EVENT_NAME, EVENT_IMAGE_URL, EVENT_START_DATE, EVENT_END_DATE,
-        EVENT_TARGET_ACCOUNT, EVENT_TARGET_CATEGORY, EVENT_DISCOUNT_RATE, EVENT_DESCRIPTION)
+
+ <!-- 이벤트 등록 -->
+ <insert id="insert" parameterType="bugsandwich.ornably.event.EventDTO">
+     INSERT INTO event
+        (event_name, event_image_url, event_start_date, event_end_date,
+        event_target_account, event_target_category, event_discount_rate, event_description)
         VALUES (#{eventName}, #{eventImageUrl}, #{eventStartDate}, #{eventEndDate}, #{eventTargetAccount}, #{eventTargetCategory}, #{eventDiscountRate}, #{eventDescription})
-  	</insert>
-  	
-  	<!-- 이벤트 종료 요청 (종료 날짜 > 종료 요청한 날짜) -->
-	<update id="update" parameterType="bugsandwich.ornably.event.EventDTO">
-		UPDATE EVENT		
-		SET EVENT_END_DATE = DATE_SUB(NOW(), INTERVAL 1 DAY)
-		WHERE EVENT_PK = #{eventPk}
-	</update>
-	
-	<!-- 전체 이벤트 조회 -->
-	<select id="selectAll" resultType="bugsandwich.ornably.event.EventDTO">
-	    SELECT
-	        EVENT_PK               AS eventPk,
-	        EVENT_NAME             AS eventName,
-	        EVENT_START_DATE       AS eventStartDate,
-	        EVENT_END_DATE         AS eventEndDate,
-	        EVENT_TARGET_ACCOUNT   AS eventTargetAccount,
-	        EVENT_TARGET_CATEGORY  AS eventTargetCategory,
-	        EVENT_DISCOUNT_RATE    AS eventDiscountRate,
-	        EVENT_DESCRIPTION      AS eventDescription
-	    FROM EVENT
-	    ORDER BY EVENT_START_DATE DESC
-	</select>
-	
-	<!-- 가장 최근 이벤트 pk 추출 -->
-	<select id="selectRecentEventPk" resultType="bugsandwich.ornably.event.EventDTO">
-		SELECT
-			MAX(EVENT_PK)		  AS eventPk
-		FROM EVENT
-	</select>
-	
-	<!-- 현재 진행중인 이벤트 조회 -->
-	<select id="selectAllProgressEvent" resultType="bugsandwich.ornably.event.EventDTO">
-		SELECT
-			EVENT_PK			AS eventPk,
-			EVENT_NAME          AS eventName,
-	        EVENT_IMAGE_URL     AS eventImageUrl,
-	        EVENT_START_DATE    AS eventStartDate,
-	        EVENT_END_DATE      AS eventEndDate,
-	        EVENT_DESCRIPTION   AS eventDescription,
-	        EVENT_DISCOUNT_RATE AS eventDiscountRate
-	    FROM EVENT
-    WHERE EVENT_START_DATE &lt;= NOW() <!-- < -->
-      AND EVENT_END_DATE   &gt;= NOW() <!-- > -->
-	    ORDER BY EVENT_START_DATE ASC
-	</select>
+ </insert>
+
+ <!-- 이벤트 종료 요청 (종료 날짜 > 종료 요청한 날짜) -->
+    <update id="update" parameterType="bugsandwich.ornably.event.EventDTO">
+        UPDATE event
+        SET event_end_date = DATE_SUB(NOW(), INTERVAL 1 DAY)
+        WHERE event_pk = #{eventPk}
+    </update>
+
+    <!-- 전체 이벤트 조회 -->
+    <select id="selectAll" resultType="bugsandwich.ornably.event.EventDTO">
+        SELECT
+            event_pk               AS eventPk,
+            event_name             AS eventName,
+            event_start_date       AS eventStartDate,
+            event_end_date         AS eventEndDate,
+            event_target_account   AS eventTargetAccount,
+            event_target_category  AS eventTargetCategory,
+            event_discount_rate    AS eventDiscountRate,
+            event_description      AS eventDescription
+        FROM event
+        ORDER BY event_start_date DESC
+    </select>
+
+    <!-- 가장 최근 이벤트 pk 추출 -->
+    <select id="selectRecentEventPk" resultType="bugsandwich.ornably.event.EventDTO">
+        SELECT
+            MAX(event_pk)          AS eventPk
+        FROM event
+    </select>
+
+    <!-- 현재 진행중인 이벤트 조회 -->
+    <select id="selectAllProgressEvent" resultType="bugsandwich.ornably.event.EventDTO">
+        SELECT
+            event_pk            AS eventPk,
+            event_name          AS eventName,
+            event_image_url     AS eventImageUrl,
+            event_start_date    AS eventStartDate,
+            event_end_date      AS eventEndDate,
+            event_description   AS eventDescription,
+            event_discount_rate AS eventDiscountRate
+        FROM event
+    WHERE event_start_date &lt;= NOW() <!-- < -->
+      AND event_end_date   &gt;= NOW() <!-- > -->
+        ORDER BY event_start_date ASC
+    </select>
   </mapper>

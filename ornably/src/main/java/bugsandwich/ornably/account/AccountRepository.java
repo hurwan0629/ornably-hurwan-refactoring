@@ -15,78 +15,78 @@ public class AccountRepository {
 	// 로그인
 	private static final String LOGIN =
 		    "SELECT " +
-		    "ACCOUNT_PK   AS accountPk, " +
-		    "ACCOUNT_ID   AS accountId, " +
-		    "ACCOUNT_NAME AS accountName, " +
-		    "ACCOUNT_ROLE AS accountRole, " +
-		    "ACCOUNT_PASSWORD_HASH AS accountPasswordHash " +
-		    "FROM ACCOUNT " +
-		    "WHERE ACCOUNT_ID = ? ";
+		    "account_pk   AS accountPk, " +
+		    "account_id   AS accountId, " +
+		    "account_name AS accountName, " +
+		    "account_role AS accountRole, " +
+		    "account_password_hash AS accountPasswordHash " +
+		    "FROM account " +
+		    "WHERE account_id = ? ";
 
 
 	// 회원가입
 	private static final String ACCOUNT_JOIN = 
-		    "INSERT INTO ACCOUNT (ACCOUNT_ID, ACCOUNT_PASSWORD_HASH, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PHONE, ACCOUNT_EVENT_OPT_IN, ACCOUNT_ROLE) " +
+		    "INSERT INTO account (account_id, account_password_hash, account_name, account_email, account_phone, account_event_opt_in, account_role) " +
 		    "VALUES (?, ?, ?, ?, ?, IFNULL(?, FALSE), ?)";
 
 
 	// 회원 탈퇴
 	private static final String UPDATE_SIGN_OUT = 
-		    "UPDATE ACCOUNT " +
-		    "SET ACCOUNT_ID = NULL " + // ID만 NULL로 변경 나머지는 보존
-		    "WHERE ACCOUNT_PK = ?";
+		    "UPDATE account " +
+		    "SET account_id = NULL " + // ID만 NULL로 변경 나머지는 보존
+		    "WHERE account_pk = ?";
 
 	// 탈퇴 전 비밀번호 확인
 	private static final String SELECT_CHECK_PASSWORD_BY_PK =
 		    "SELECT " +
-		    "ACCOUNT_PASSWORD_HASH AS accountPasswordHash " +
-		    "FROM ACCOUNT " +
-		    "WHERE ACCOUNT_PK = ? ";
+		    "account_password_hash AS accountPasswordHash " +
+		    "FROM account " +
+		    "WHERE account_pk = ? ";
 
 	// 마이페이지 조회
 	private static final String SELECT_MY_PAGE =
 		    "SELECT " +
-		    "a.ACCOUNT_ID    AS accountId, " +
-		    "a.ACCOUNT_NAME  AS accountName, " +
-		    "a.ACCOUNT_EMAIL AS accountEmail, " +
-		    "a.ACCOUNT_PHONE AS accountPhone, " +
-		    "a.ACCOUNT_DATE  AS accountDate, " +
-		    "IFNULL(SUM(oi.ORDERS_ITEM_COUNT * oi.ORDERS_ITEM_PRICE), 0) AS accountTotalAmount " +
-		    "FROM ACCOUNT a " +
-		    "LEFT JOIN ORDERS o ON a.ACCOUNT_PK = o.ACCOUNT_PK " +
-		    "LEFT JOIN ORDERS_ITEM oi ON o.ORDERS_PK = oi.ORDERS_PK " +
-		    "WHERE a.ACCOUNT_PK = ? " +
-		    "GROUP BY a.ACCOUNT_ID, a.ACCOUNT_NAME, a.ACCOUNT_EMAIL, a.ACCOUNT_PHONE, a.ACCOUNT_DATE";
+		    "a.account_id    AS accountId, " +
+		    "a.account_name  AS accountName, " +
+		    "a.account_email AS accountEmail, " +
+		    "a.account_phone AS accountPhone, " +
+		    "a.account_date  AS accountDate, " +
+		    "IFNULL(SUM(oi.orders_item_count * oi.orders_item_price), 0) AS accountTotalAmount " +
+		    "FROM account a " +
+		    "LEFT JOIN orders o ON a.account_pk = o.account_pk " +
+		    "LEFT JOIN orders_item oi ON o.orders_pk = oi.orders_pk " +
+		    "WHERE a.account_pk = ? " +
+		    "GROUP BY a.account_id, a.account_name, a.account_email, a.account_phone, a.account_date";
 
 
 	// 아이디 중복 확인
 	private static final String SELECT_CHECK_LOGIN_ID = 
 		    "SELECT COUNT(*) " +
-		    "FROM ACCOUNT " +
-		    "WHERE ACCOUNT_ID = ?";
+		    "FROM account " +
+		    "WHERE account_id = ?";
 
 	// 폰번호 중복 확인
 	private static final String SELECT_CHECK_LOGIN_PHONE = 
 		    "SELECT COUNT(*) " +
-		    "FROM ACCOUNT " +
-		    "WHERE ACCOUNT_PHONE = ?";
+		    "FROM account " +
+		    "WHERE account_phone = ?";
 	
 	// 회원 아이디로 회원 PK 찾기
 	private static final String SELECT_ACCOUNT_PK_BY_ACCOUNT_ID =
-		    "SELECT ACCOUNT_PK AS accountPk " +
-		    "FROM ACCOUNT " +
-		    "WHERE ACCOUNT_ID = ?";
+		    "SELECT account_pk AS accountPk " +
+		    "FROM account " +
+		    "WHERE account_id = ?";
 
 	// 계정 1명 조회
 	private static final String SELECT_ORNABLY_USER_BY_ACCOUNT_ID =
 		    "SELECT " +
-		    "    ACCOUNT_PK 	AS accountPk, " +
-		    "    ACCOUNT_NAME 	AS accountName, " +
-		    "    ACCOUNT_ID 	AS accountId, " +
-		    "    ACCOUNT_PASSWORD_HASH AS accountPasswordHash, " +
-		    "    ACCOUNT_ROLE 	AS accountRole " +
-		    "FROM ACCOUNT " +
-		    "WHERE ACCOUNT_ID = ?";
+		    "    account_pk 	AS accountPk, " +
+		    "    account_name 	AS accountName, " +
+		    "    account_id 	AS accountId, " +
+		    "    account_password_hash AS accountPasswordHash, " +
+		    "    account_role 	AS accountRole " +
+		    "FROM account " +
+		    "WHERE account_id = ?";
 
 	
 	
@@ -98,20 +98,20 @@ public class AccountRepository {
 	private static final String SELECT_ALL_ROLE_USER_ACCOUNT_BY_ADMIN_SEARCH =
 		    "WITH acct AS ( " +
 		    "  SELECT " +
-		    "    A.ACCOUNT_PK   AS accountPk, " +
-		    "	 A.ACCOUNT_ID 	AS accountId, " +
-		    "    A.ACCOUNT_NAME AS accountName, " +
-		    "    A.ACCOUNT_DATE AS accountDate, " +
-		    "    A.ACCOUNT_ROLE AS accountRole, " +
-		    "    COALESCE(SUM(OI.ORDERS_ITEM_COUNT * OI.ORDERS_ITEM_PRICE), 0) AS accountTotalAmount " +
-		    "  FROM ACCOUNT A " +
-		    "  LEFT JOIN ORDERS O " +
-		    "    ON A.ACCOUNT_PK = O.ACCOUNT_PK " +
-		    "  LEFT JOIN ORDERS_ITEM OI " +
-		    "    ON O.ORDERS_PK = OI.ORDERS_PK " +
-		    "  WHERE A.ACCOUNT_ROLE != 'ADMIN' " +
+		    "    A.account_pk   AS accountPk, " +
+		    "	 A.account_id 	AS accountId, " +
+		    "    A.account_name AS accountName, " +
+		    "    A.account_date AS accountDate, " +
+		    "    A.account_role AS accountRole, " +
+		    "    COALESCE(SUM(OI.orders_item_count * OI.orders_item_price), 0) AS accountTotalAmount " +
+		    "  FROM account A " +
+		    "  LEFT JOIN orders O " +
+		    "    ON A.account_pk = O.account_pk " +
+		    "  LEFT JOIN orders_item OI " +
+		    "    ON O.orders_pk = OI.orders_pk " +
+		    "  WHERE A.account_role != 'ADMIN' " +
 		    "  GROUP BY " +
-		    "    A.ACCOUNT_PK, A.ACCOUNT_NAME, A.ACCOUNT_DATE, A.ACCOUNT_ROLE " +
+		    "    A.account_pk, A.account_name, A.account_date, A.account_role " +
 		    ") " +
 		    "SELECT " +
 		    "  acct.accountPk, " +
@@ -155,32 +155,32 @@ public class AccountRepository {
 	// 관리자 회원 정보 조회
 	private static final String SELECT_ADMIN_ACCOUNT_INFO_BY_ACCOUNT_PK =
 	    "SELECT " +
-	    "    a.ACCOUNT_PK           AS accountPk, " +
-	    "    a.ACCOUNT_ID           AS accountId, " +
-	    "    a.ACCOUNT_NAME         AS accountName, " +
-	    "    a.ACCOUNT_DATE         AS accountDate, " +
-	    "    a.ACCOUNT_ROLE         AS accountRole, " +
-	    "    a.ACCOUNT_EVENT_OPT_IN AS accountEventOptIn, " +
-	    "    IFNULL(SUM(oi.ORDERS_ITEM_COUNT * oi.ORDERS_ITEM_PRICE), 0) AS accountTotalAmount " +
-	    "FROM ACCOUNT a " +
-	    "LEFT JOIN ORDERS o ON a.ACCOUNT_PK = o.ACCOUNT_PK " +
-	    "LEFT JOIN ORDERS_ITEM oi ON o.ORDERS_PK = oi.ORDERS_PK " +
-	    "WHERE a.ACCOUNT_PK = ? " +
+	    "    a.account_pk           AS accountPk, " +
+	    "    a.account_id           AS accountId, " +
+	    "    a.account_name         AS accountName, " +
+	    "    a.account_date         AS accountDate, " +
+	    "    a.account_role         AS accountRole, " +
+	    "    a.account_event_opt_in AS accountEventOptIn, " +
+	    "    IFNULL(SUM(oi.orders_item_count * oi.orders_item_price), 0) AS accountTotalAmount " +
+	    "FROM account a " +
+	    "LEFT JOIN orders o ON a.account_pk = o.account_pk " +
+	    "LEFT JOIN orders_item oi ON o.orders_pk = oi.orders_pk " +
+	    "WHERE a.account_pk = ? " +
 	    "GROUP BY " +
-	    "    a.ACCOUNT_PK, " +
-	    "    a.ACCOUNT_ID, " +
-	    "    a.ACCOUNT_NAME, " +
-	    "    a.ACCOUNT_DATE, " +
-	    "    a.ACCOUNT_ROLE, " +
-	    "    a.ACCOUNT_EVENT_OPT_IN";
+	    "    a.account_pk, " +
+	    "    a.account_id, " +
+	    "    a.account_name, " +
+	    "    a.account_date, " +
+	    "    a.account_role, " +
+	    "    a.account_event_opt_in";
 
 	
     private static final String SELECT_ACCOUNT_EMAIL_EVENT_OPTIN =
-            "SELECT a.ACCOUNT_EMAIL AS accountEmail " +
-            "FROM ACCOUNT a " +
-            "WHERE a.ACCOUNT_EMAIL IS NOT NULL " +      // 이메일 존재
-            "AND a.ACCOUNT_ID IS NOT NULL " +           // 탈퇴 회원 제외
-            "AND a.ACCOUNT_EVENT_OPT_IN = 1";           // 이벤트 수신 동의
+            "SELECT a.account_email AS accountEmail " +
+            "FROM account a " +
+            "WHERE a.account_email IS NOT NULL " +      // 이메일 존재
+            "AND a.account_id IS NOT NULL " +           // 탈퇴 회원 제외
+            "AND a.account_event_opt_in = 1";           // 이벤트 수신 동의
    
    
 	

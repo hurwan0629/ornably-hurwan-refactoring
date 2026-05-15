@@ -4,8 +4,10 @@ services:
     container_name: ornably-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_SCHEMA}
+      MYSQL_USER: ${ORNABLY_DB_USER}
+      MYSQL_PASSWORD: ${ORNABLY_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: "ornably_db"
       TZ: Asia/Seoul
     command:
       - --character-set-server=utf8mb4

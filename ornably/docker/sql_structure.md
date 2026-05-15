@@ -31,6 +31,9 @@ MySQL Server
     |-- Spring docker 접속: mysql:3306/ornably_db
     |
     |-- account
+    |   `-- sample admin
+    |       |-- account_id: admin
+    |       `-- password: Admin1234!@
     |-- item
     |-- event
     |-- address

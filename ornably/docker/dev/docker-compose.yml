@@ -4,8 +4,10 @@ services:
     container_name: ornably-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: "1234"
-      MYSQL_DATABASE: kevin
+      MYSQL_USER: "kevin" # 'kevin'@'%'
+      MYSQL_PASSWORD: "kevin1234"
+      MYSQL_ROOT_PASSWORD: "root1234"
+      MYSQL_DATABASE: "ornably_db"
       TZ: Asia/Seoul
     ports:
       - "3306:3306"

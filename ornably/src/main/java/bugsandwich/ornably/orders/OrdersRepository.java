@@ -11,46 +11,46 @@ import org.springframework.stereotype.Repository;
 public class OrdersRepository {
 	@Autowired // 의존주입
 	private JdbcTemplate jdbcTemplate;
-	
+
 	// 회원 주문 전체 조회
 	private static final String SELECT_ALL_ORDERS_BY_ACCOUNT_PK =
 		"WITH ranked_items AS ( "
 		+ "  SELECT "
-		+ "    OI.ORDERS_PK, "
-		+ "    OI.ITEM_PK, "
-		+ "    (OI.ORDERS_ITEM_PRICE * OI.ORDERS_ITEM_COUNT) AS lineAmount, "
+		+ "    OI.orders_pk, "
+		+ "    OI.item_pk, "
+		+ "    (OI.orders_item_price * OI.orders_item_count) AS lineAmount, "
 		+ "    ROW_NUMBER() OVER ( "
-		+ "      PARTITION BY OI.ORDERS_PK "
-		+ "      ORDER BY (OI.ORDERS_ITEM_PRICE * OI.ORDERS_ITEM_COUNT) DESC, OI.ITEM_PK ASC "
+		+ "      PARTITION BY OI.orders_pk "
+		+ "      ORDER BY (OI.orders_item_price * OI.orders_item_count) DESC, OI.item_pk ASC "
 		+ "    ) AS rn "
-		+ "  FROM ORDERS_ITEM OI "
+		+ "  FROM orders_item OI "
 		+ "), "
 		+ "order_sum AS (\r\n"
 		+ "  SELECT\r\n"
-		+ "    OI.ORDERS_PK,\r\n"
-		+ "    SUM(OI.ORDERS_ITEM_COUNT) AS ordersItemCount,\r\n"
-		+ "    SUM(OI.ORDERS_ITEM_PRICE * OI.ORDERS_ITEM_COUNT) AS ordersTotalAmount\r\n"
-		+ "  FROM ORDERS_ITEM OI\r\n"
-		+ "  GROUP BY OI.ORDERS_PK\r\n"
+		+ "    OI.orders_pk,\r\n"
+		+ "    SUM(OI.orders_item_count) AS ordersItemCount,\r\n"
+		+ "    SUM(OI.orders_item_price * OI.orders_item_count) AS ordersTotalAmount\r\n"
+		+ "  FROM orders_item OI\r\n"
+		+ "  GROUP BY OI.orders_pk\r\n"
 		+ ")\r\n"
 		+ "SELECT\r\n"
-		+ "  O.ORDERS_PK AS ordersPk,\r\n"
-		+ "  O.ORDERS_STATUS AS ordersStatus,\r\n"
-		+ "  I.ITEM_IMAGE_URL AS itemImageUrl,\r\n"
-		+ "  I.ITEM_NAME AS ordersSignatureItemName,\r\n"
+		+ "  O.orders_pk AS ordersPk,\r\n"
+		+ "  O.orders_status AS ordersStatus,\r\n"
+		+ "  I.item_image_url AS itemImageUrl,\r\n"
+		+ "  I.item_name AS ordersSignatureItemName,\r\n"
 		+ "  S.ordersItemCount AS ordersItemCount,\r\n"
-		+ "  O.ADDRESS_NAME AS addressName,\r\n"
-		+ "  DATE_FORMAT(O.ORDERS_DATE, '%Y-%m-%d') AS ordersDate,\r\n"
+		+ "  O.address_name AS addressName,\r\n"
+		+ "  DATE_FORMAT(O.orders_date, '%Y-%m-%d') AS ordersDate,\r\n"
 		+ "  S.ordersTotalAmount AS ordersTotalAmount\r\n"
-		+ "FROM ORDERS O\r\n"
+		+ "FROM orders O\r\n"
 		+ "JOIN order_sum S\r\n"
-		+ "  ON S.ORDERS_PK = O.ORDERS_PK\r\n"
+		+ "  ON S.orders_pk = O.orders_pk\r\n"
 		+ "JOIN ranked_items R\r\n"
-		+ "  ON R.ORDERS_PK = O.ORDERS_PK AND R.rn = 1\r\n"
-		+ "JOIN ITEM I\r\n"
-		+ "  ON I.ITEM_PK = R.ITEM_PK\r\n"
-		+ "WHERE O.ACCOUNT_PK = ?\r\n"
-		+ "ORDER BY O.ORDERS_DATE DESC";
+		+ "  ON R.orders_pk = O.orders_pk AND R.rn = 1\r\n"
+		+ "JOIN item I\r\n"
+		+ "  ON I.item_pk = R.item_pk\r\n"
+		+ "WHERE O.account_pk = ?\r\n"
+		+ "ORDER BY O.orders_date DESC";
 	/*
         "SELECT " +
         "    O.ORDERS_PK AS ordersPk, " +
@@ -73,30 +73,30 @@ public class OrdersRepository {
 
 	// 주문 추가
     private static final String INSERT_ORDERS =
-            "INSERT INTO ORDERS " +
-            "    (ACCOUNT_PK, ORDERS_DATE, ADDRESS_NAME, ORDERS_PAYMENT_TYPE, ORDERS_IMPORT_UID, ORDERS_MESSAGE, ORDERS_STATUS) " +
-            "SELECT ?, NOW(), ADDRESS_NAME, ?, ?, ?, '상품 준비중' " +
-            "FROM ADDRESS " +
-            "WHERE ADDRESS_PK = ?";
-    
-    
+            "INSERT INTO orders " +
+            "    (account_pk, orders_date, address_name, orders_payment_type, orders_import_uid, orders_message, orders_status) " +
+            "SELECT ?, NOW(), address_name, ?, ?, ?, '상품 준비중' " +
+            "FROM address " +
+            "WHERE address_pk = ?";
+
+
     // 주문 상세 페이지 주문 정보 조회
     private final static String SELECT_ONE_ORDERS_PAGE_DATA =
-    		"SELECT \r\n"
-    		+ "ORDERS_IMPORT_UID ordersImportUid,"
-    		+ "ORDERS_DATE ordersDate,"
-    		+ "ORDERS_STATUS ordersStatus,"
-    		+ "ORDERS_PAYMENT_TYPE ordersPaymentType,"
-    		+ "ORDERS_MESSAGE ordersMessage, "
-    		+ "ADDRESS_NAME addressName "
-    		+ "FROM ORDERS O "
-    		+ "WHERE ORDERS_PK = ?";
-    
-	// 회원 최근 주문 조회 
+    	"SELECT \r\n"
+    	+ "orders_import_uid ordersImportUid,"
+    	+ "orders_date ordersDate,"
+    	+ "orders_status ordersStatus,"
+    	+ "orders_payment_type ordersPaymentType,"
+    	+ "orders_message ordersMessage, "
+    	+ "address_name addressName "
+    	+ "FROM orders O "
+    	+ "WHERE orders_pk = ?";
+
+	// 회원 최근 주문 조회
 	private final static String SELECT_ORDERS_PK_BY_UID =
-			"SELECT ORDERS_PK AS ordersPk " + 
-			"FROM ORDERS " +
-			"WHERE ORDERS_IMPORT_UID = ?";
+			"SELECT orders_pk AS ordersPk " +
+			"FROM orders " +
+			"WHERE orders_import_uid = ?";
 			/*
 	    "SELECT ORDERS_PK AS ordersPk " +
 	    "FROM ORDERS " +
@@ -106,34 +106,34 @@ public class OrdersRepository {
 */
 	// 회원 주문 삭제
 	private final static String DELETE_ONE_ORDERS =
-	    "DELETE FROM ORDERS WHERE ACCOUNT_PK = ?";
+	    "DELETE FROM orders WHERE account_pk = ?";
 
-	
-	
-	
+
+
+
 	public List<OrdersDTO> selectAll(OrdersDTO orderDTO){
-		
+
 
 		// 마이 페이지 들어갔을 때 주문내역 전체 출력
 		if("SELECT_ALL_ORDERS_BY_ACCOUNT_PK".equals(orderDTO.getCondition())) {
-			
+
 			return jdbcTemplate.query(
 					SELECT_ALL_ORDERS_BY_ACCOUNT_PK,
 				new BeanPropertyRowMapper<>(OrdersDTO.class),
 				orderDTO.getAccountPk()
 			);
 		}
-		
+
 		return null;
 	}
-	
-	
+
+
 	public OrdersDTO selectOne(OrdersDTO orderDTO) {
-		
+
 
 		// 주문내역 생성 후 해당 주문내역의 주문상세 생성을 위한 주문내역 PK 보내줌
 		if("SELECT_ONE_ORDERS_PK_BY_UID".equals(orderDTO.getCondition())) {
-			
+
 			return jdbcTemplate.queryForObject(
 				SELECT_ORDERS_PK_BY_UID,
 				new BeanPropertyRowMapper<>(OrdersDTO.class),
@@ -141,30 +141,30 @@ public class OrdersRepository {
 			);
 		}
 		else if("SELECT_ONE_ORDERS_PAGE_DATA".equals(orderDTO.getCondition())) {
-			
+
 			return jdbcTemplate.queryForObject(
 				SELECT_ONE_ORDERS_PAGE_DATA,
 				new BeanPropertyRowMapper<>(OrdersDTO.class),
 				orderDTO.getOrdersPk()
 			);
 		}
-		
+
 		return null;
 	}
-	
-	
+
+
 	private boolean update(OrdersDTO orderDTO) {
 		return false;
 	}
-	
-	
+
+
 	public boolean insert(OrdersDTO orderDTO) {
-		
+
 		int result = 0;
 
 		// 주문내역 생성
 		if("INSERT_ORDERS".equals(orderDTO.getCondition())) {
-			
+
 			result = jdbcTemplate.update(
 				INSERT_ORDERS,
 				orderDTO.getAccountPk(),
@@ -175,26 +175,26 @@ public class OrdersRepository {
 			);
 		}
 		else {
-			
+
 		}
 		return result > 0;
 	}
-	
-	
+
+
 	public boolean delete(OrdersDTO orderDTO) {
-		
+
 		int result = 0;
-		
+
 		// 회원 탈퇴 시 해당 회원 주문내역 전부 삭제
 		if("DELETE_ALL_ORDER_BY_ACCOUNT_PK".equals(orderDTO.getCondition())) {
-			
+
 			result = jdbcTemplate.update(
 				DELETE_ONE_ORDERS,
 				orderDTO.getAccountPk()
 			);
-		} 
+		}
 		else {
-			
+
 		}
 		return result > 0;	}
 }

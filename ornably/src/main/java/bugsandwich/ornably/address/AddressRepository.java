@@ -15,49 +15,49 @@ public class AddressRepository {
 	
 	// 주소 전체 삭제 (회원 탈퇴 시)
     private static final String DELETE_ALL_ADDRESS_BY_ACCOUNT_PK =
-            "DELETE FROM ADDRESS WHERE ACCOUNT_PK = ?";
+            "DELETE FROM address WHERE account_pk = ?";
 
     // 주소 한 개 삭제
     private static final String DELETE_ADDRESS_BY_ADDRESS_PK =
-            "DELETE FROM ADDRESS WHERE ADDRESS_PK = ?";
+            "DELETE FROM address WHERE address_pk = ?";
 
     // 회원의 모든 주소 조회
     private static final String SELECT_ALL_ADDRESS_BY_ACCOUNT_PK =
             "SELECT " +
-            "  ADDRESS_PK        	AS addressPk, " +
-            "  ACCOUNT_PK        	AS accountPk, " +
-            "  ADDRESS_NAME      	AS addressName, " +
-            "  ADDRESS_IS_DEFAULT 	AS addressIsDefault, " +
-            "  ADDRESS_POSTAL_CODE 	AS addressPostalCode, " +
-            "  ADDRESS_REGION    	AS addressRegion, " +
-            "  ADDRESS_DETAIL    	AS addressDetail " +
-            "FROM ADDRESS " +
-            "WHERE ACCOUNT_PK = ?";
+            "  address_pk        	AS addressPk, " +
+            "  account_pk        	AS accountPk, " +
+            "  address_name      	AS addressName, " +
+            "  address_is_default 	AS addressIsDefault, " +
+            "  address_postal_code 	AS addressPostalCode, " +
+            "  address_region    	AS addressRegion, " +
+            "  address_detail    	AS addressDetail " +
+            "FROM address " +
+            "WHERE account_pk = ?";
 
     // 기본 배송지 조회
     private static final String SELECT_DEFAULT_ADDRESS =
-            "SELECT ADDRESS_PK AS addressPk FROM ADDRESS " +
-            "WHERE ACCOUNT_PK = ? AND ADDRESS_IS_DEFAULT = 1";
+            "SELECT address_pk AS addressPk FROM address " +
+            "WHERE account_pk = ? AND address_is_default = 1";
     
     // 특정 주소가 기본 배송지인지 확인
     private static final String SELECT_IS_DEFAULT_ADDRESS_BY_ADDRESS_PK =
-            "SELECT ADDRESS_PK AS addressPk FROM ADDRESS " +
-            "WHERE ADDRESS_PK = ? AND ADDRESS_IS_DEFAULT = 1";
+            "SELECT address_pk AS addressPk FROM address " +
+            "WHERE address_pk = ? AND address_is_default = 1";
 
     // 기본 배송지 해제
     private static final String UPDATE_DEFAULT_ADDRESS_REMOVE =
-            "UPDATE ADDRESS SET ADDRESS_IS_DEFAULT = FALSE " +
-            "WHERE ACCOUNT_PK = ? AND ADDRESS_IS_DEFAULT = TRUE";
+            "UPDATE address SET address_is_default = FALSE " +
+            "WHERE account_pk = ? AND address_is_default = TRUE";
 
     // 기본 배송지로 설정
     private static final String UPDATE_DEFAULT_ADDRESS =
-            "UPDATE ADDRESS SET ADDRESS_IS_DEFAULT = TRUE " +
-            "WHERE ADDRESS_PK = ? AND ACCOUNT_PK = ? ";
+            "UPDATE address SET address_is_default = TRUE " +
+            "WHERE address_pk = ? AND account_pk = ? ";
 
     // 주소 등록
     private static final String INSERT_NEW_ADDRESS =
-            "INSERT INTO ADDRESS " +
-            "(ACCOUNT_PK, ADDRESS_NAME, ADDRESS_IS_DEFAULT, ADDRESS_POSTAL_CODE, ADDRESS_REGION, ADDRESS_DETAIL) " +
+            "INSERT INTO address " +
+            "(account_pk, address_name, address_is_default, address_postal_code, address_region, address_detail) " +
             "VALUES (?, ?, IFNULL(?, FALSE), ?, ?, ?)";
 
     
@@ -86,7 +86,7 @@ public class AddressRepository {
 			List<AddressDTO> list = jdbcTemplate.query(SELECT_DEFAULT_ADDRESS,
                 (rs, rowNum) -> {
                     AddressDTO data = new AddressDTO();
-                    data.setAddressPk(rs.getInt("ADDRESS_PK"));
+                    data.setAddressPk(rs.getInt("address_pk"));
                     return data;
                 },
                 addressDTO.getAccountPk()
@@ -100,7 +100,7 @@ public class AddressRepository {
             List<AddressDTO> list = jdbcTemplate.query(SELECT_IS_DEFAULT_ADDRESS_BY_ADDRESS_PK,
                 (rs, rowNum) -> {
                     AddressDTO data = new AddressDTO();
-                    data.setAddressPk(rs.getInt("ADDRESS_PK"));
+                    data.setAddressPk(rs.getInt("address_pk"));
                     return data;
                 },
                 addressDTO.getAddressPk()

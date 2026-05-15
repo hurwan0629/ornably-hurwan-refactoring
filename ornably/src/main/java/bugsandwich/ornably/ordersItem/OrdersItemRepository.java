@@ -14,33 +14,33 @@ public class OrdersItemRepository {
 	
 	// 주문 상세 조회
 	private static final String SELECT_ALL_ORDERS_ITEM = 
-		    "SELECT DISTINCT ORD.ORDERS_PK 	AS ordersPk, " +
-		    "       ORD.ORDERS_ITEM_PK 		AS ordersItemPk, " +
-		    "       I.ITEM_NAME 			AS itemName, " +
-		    "       I.ITEM_PK 				AS itemPk, " +
-		    "       ORD.ORDERS_ITEM_COUNT 	AS ordersItemCount, " +
-		    "       ORD.ORDERS_ITEM_PRICE 	AS ordersItemPrice, " +
-		    "       I.ITEM_IMAGE_URL 		AS itemImageUrl, " +
-		    "       CASE WHEN EXISTS (SELECT 1 FROM REVIEW R WHERE R.ITEM_PK = I.ITEM_PK AND R.ACCOUNT_PK = ?) " +
+		    "SELECT DISTINCT ORD.orders_pk 	AS ordersPk, " +
+		    "       ORD.orders_item_pk 		AS ordersItemPk, " +
+		    "       I.item_name 			AS itemName, " +
+		    "       I.item_pk 				AS itemPk, " +
+		    "       ORD.orders_item_count 	AS ordersItemCount, " +
+		    "       ORD.orders_item_price 	AS ordersItemPrice, " +
+		    "       I.item_image_url 		AS itemImageUrl, " +
+		    "       CASE WHEN EXISTS (SELECT 1 FROM review R WHERE R.item_pk = I.item_pk AND R.account_pk = ?) " +
 		    "            THEN 1 ELSE 0 END AS isReviewed " +
 		    "FROM ( " +
-		    "    SELECT O.ORDERS_PK, OI.ORDERS_ITEM_PK, OI.ITEM_PK, OI.ORDERS_ITEM_COUNT, OI.ORDERS_ITEM_PRICE " +
-		    "    FROM ORDERS O INNER JOIN ORDERS_ITEM OI ON O.ORDERS_PK = OI.ORDERS_PK " +
+		    "    SELECT O.orders_pk, OI.orders_item_pk, OI.item_pk, OI.orders_item_count, OI.orders_item_price " +
+		    "    FROM orders O INNER JOIN orders_item OI ON O.orders_pk = OI.orders_pk " +
 		    ") ORD " +
-		    "INNER JOIN ITEM I ON ORD.ITEM_PK = I.ITEM_PK " +
-		    "WHERE ORD.ORDERS_PK = ? " +
-		    "ORDER BY ORD.ORDERS_ITEM_PK";
+		    "INNER JOIN item I ON ORD.item_pk = I.item_pk " +
+		    "WHERE ORD.orders_pk = ? " +
+		    "ORDER BY ORD.orders_item_pk";
 					
 	// 주문 상세 등록
 	private static final String INSERT_ORDERS_ITEM = 
-		    "INSERT INTO ORDERS_ITEM (ORDERS_PK, ITEM_PK, ORDERS_ITEM_COUNT, ORDERS_ITEM_PRICE) " +
+		    "INSERT INTO orders_item (orders_pk, item_pk, orders_item_count, orders_item_price) " +
 		    "VALUES (?, ?, ?, ?)";
 
 	
 	// 주문 상세 삭제
 	private static final String DELETE_ORDERS_ITEM = 
-		    "DELETE FROM ORDERS_ITEM " +
-		    "WHERE ORDERS_PK IN (SELECT ORDERS_PK FROM ORDERS WHERE ACCOUNT_PK = ?)";
+		    "DELETE FROM orders_item " +
+		    "WHERE orders_pk IN (SELECT orders_pk FROM orders WHERE account_pk = ?)";
 	
     
     

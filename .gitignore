@@ -89,5 +89,3 @@ coverage/
 *.pid.lock
 ornably/docker/data/
 ornably/resource/images/
-application.properties
-application-*.properties

@@ -14,113 +14,113 @@ public class ReviewRepository {
 	
 	// 리뷰 작성
 	private static final String INSERT_REVIEW_WRITE =
-	    "INSERT INTO REVIEW " +
-	    "(ACCOUNT_PK, ITEM_PK, REVIEW_TITLE, REVIEW_CONTENT, REVIEW_STAR, REVIEW_IMAGE_URL) " +
+	    "INSERT INTO review " +
+	    "(account_pk, item_pk, review_title, review_content, review_star, review_image_url) " +
 	    "VALUES (?, ?, ?, ?, ?, ?)";
 
 	// 상품별 리뷰 총개수 조회
 	private static final String SELECT_ITEM_REVIEW_COUNT =
 	    "SELECT COUNT(*) AS reviewTotalCount " +
-	    "FROM REVIEW " +
-	    "WHERE ITEM_PK = ?";
+	    "FROM review " +
+	    "WHERE item_pk = ?";
 
 	// 리뷰수정 전 기존 리뷰 정보 가져오기
 	private static final String SELECT_UPDATE_REVIEW_DATA =
 	    "SELECT " +
-	    "   R.REVIEW_PK		AS reviewPk, " +
-	    "   A.ACCOUNT_NAME	AS accountName, " +
-	    "   R.REVIEW_TITLE	AS reviewTitle, " +
-	    "   R.REVIEW_STAR	AS reviewStar, " +
-	    "   R.REVIEW_CONTENT AS reviewContent " +
-	    "FROM REVIEW R " +
-	    "JOIN ACCOUNT A ON R.ACCOUNT_PK = A.ACCOUNT_PK " +
-	    "WHERE R.REVIEW_PK = ? " +
-	    "AND R.ACCOUNT_PK = ?";
+	    "   R.review_pk		AS reviewPk, " +
+	    "   A.account_name	AS accountName, " +
+	    "   R.review_title	AS reviewTitle, " +
+	    "   R.review_star	AS reviewStar, " +
+	    "   R.review_content AS reviewContent " +
+	    "FROM review R " +
+	    "JOIN account A ON R.account_pk = A.account_pk " +
+	    "WHERE R.review_pk = ? " +
+	    "AND R.account_pk = ?";
 
 	
 	// 내가 쓴 리뷰목록
 	private static final String SELECT_MY_REVIEW_LIST =
 	    "SELECT " +
-	    "   R.REVIEW_PK		AS reviewPk, " +
-	    "   I.ITEM_PK       AS itemPk, " +
-	    "   R.REVIEW_TITLE  AS reviewTitle, " +
-	    "   R.REVIEW_STAR   AS reviewStar, " +
-	    "   R.REVIEW_CONTENT 	AS reviewContent, " +
-	    "   I.ITEM_NAME			AS itemName, " +
-	    "   I.ITEM_IMAGE_URL	AS itemImageUrl, " +
-	    "   I.ITEM_PRICE		AS itemPrice " +
-	    "FROM REVIEW R " +
-	    "INNER JOIN ITEM I ON R.ITEM_PK = I.ITEM_PK " +
-	    "WHERE R.ACCOUNT_PK = ?";
+	    "   R.review_pk		AS reviewPk, " +
+	    "   I.item_pk       AS itemPk, " +
+	    "   R.review_title  AS reviewTitle, " +
+	    "   R.review_star   AS reviewStar, " +
+	    "   R.review_content 	AS reviewContent, " +
+	    "   I.item_name			AS itemName, " +
+	    "   I.item_image_url	AS itemImageUrl, " +
+	    "   I.item_price		AS itemPrice " +
+	    "FROM review R " +
+	    "INNER JOIN item I ON R.item_pk = I.item_pk " +
+	    "WHERE R.account_pk = ?";
 	
 	
 	// 상품리뷰 존재확인
 	private static final String SELECT_EXIST_REVIEW_BY_ACCOUNT_ITEM =
 	    "SELECT COUNT(*) AS reviewTotalCount " +
-	    "FROM REVIEW " +
-	    "WHERE ACCOUNT_PK = ? " +
-	    "AND ITEM_PK = ?";
+	    "FROM review " +
+	    "WHERE account_pk = ? " +
+	    "AND item_pk = ?";
 
 	
 	// 상품별 별점
 	private static final String SELECT_ALL_REVIEW_STAR_BY_ITEM_PK =
-	    "SELECT REVIEW_STAR AS reviewStar " +
-	    "FROM REVIEW " +
-	    "WHERE ITEM_PK = ? " +
-	    "ORDER BY REVIEW_PK DESC";
+	    "SELECT review_star AS reviewStar " +
+	    "FROM review " +
+	    "WHERE item_pk = ? " +
+	    "ORDER BY review_pk DESC";
 
 	// 리뷰 페이지네이션
 	private static final String SELECT_ALL_REVIEW_PAGENATION_BY_ITEM_PK =
 	    "SELECT reviewPk, itemPk, reviewTitle, reviewContent, reviewStar, accountName, reviewDate " +
 	    "FROM ( " +
 	    "   SELECT " +
-	    "       DATE_FORMAT(R.REVIEW_DATE, '%Y-%m-%d')        AS reviewDate, " +
-	    "       R.REVIEW_PK        AS reviewPk, " +
-	    "       R.ITEM_PK          AS itemPk, " +
-	    "       R.REVIEW_TITLE     AS reviewTitle, " +
-	    "       R.REVIEW_CONTENT   AS reviewContent, " +
-	    "       R.REVIEW_STAR      AS reviewStar, " +
-	    "       A.ACCOUNT_NAME     AS accountName, " +
-	    "       ROW_NUMBER() OVER (ORDER BY R.REVIEW_PK DESC) AS rn " +
-	    "   FROM REVIEW R " +
-	    "   JOIN ACCOUNT A ON R.ACCOUNT_PK = A.ACCOUNT_PK " +
-	    "   WHERE R.ITEM_PK = ? " +
+	    "       DATE_FORMAT(R.review_date, '%Y-%m-%d')        AS reviewDate, " +
+	    "       R.review_pk        AS reviewPk, " +
+	    "       R.item_pk          AS itemPk, " +
+	    "       R.review_title     AS reviewTitle, " +
+	    "       R.review_content   AS reviewContent, " +
+	    "       R.review_star      AS reviewStar, " +
+	    "       A.account_name     AS accountName, " +
+	    "       ROW_NUMBER() OVER (ORDER BY R.review_pk DESC) AS rn " +
+	    "   FROM review R " +
+	    "   JOIN account A ON R.account_pk = A.account_pk " +
+	    "   WHERE R.item_pk = ? " +
 	    ") T " +
 	    "WHERE rn BETWEEN ? AND ?";
 
 
 	// 회원 고유번호의 모든 리뷰 삭제
 	private static final String DELETE_ALL_REVIEW_BY_ACCOUNT_PK =
-	    "DELETE FROM REVIEW WHERE ACCOUNT_PK = ?";
+	    "DELETE FROM review WHERE account_pk = ?";
 
 	// 회원 고유번호의 리뷰 개별 삭제
 	private static final String DELETE_BY_REVIEW_PK =
-	    "DELETE FROM REVIEW WHERE REVIEW_PK = ?";
+	    "DELETE FROM review WHERE review_pk = ?";
 
 	// 리뷰 수정
 	private static final String REVIEW_WRITE_EDIT =
-	    "UPDATE REVIEW SET " +
-	    "    REVIEW_TITLE   = ?, " +
-	    "    REVIEW_CONTENT = ? " +
-	    "WHERE REVIEW_PK = ?";
+	    "UPDATE review SET " +
+	    "    review_title   = ?, " +
+	    "    review_content = ? " +
+	    "WHERE review_pk = ?";
 
 	
 	// 사용자 리뷰 수정 전 기존 리뷰 정보 가져오기
 	private static final String SELECT_REVIEW_DATA_BY_REVIEW_PK =
 	    "SELECT " +
-	    "    REVIEW_PK        AS reviewPk, " +
-	    "    REVIEW_TITLE     AS reviewTitle, " +
-	    "    REVIEW_CONTENT   AS reviewContent, " +
-	    "    REVIEW_IMAGE_URL AS reviewImageUrl, " +
-	    "    REVIEW_STAR      AS reviewStar " +
-	    "FROM REVIEW " +
-	    "WHERE REVIEW_PK = ?";
+	    "    review_pk        AS reviewPk, " +
+	    "    review_title     AS reviewTitle, " +
+	    "    review_content   AS reviewContent, " +
+	    "    review_image_url AS reviewImageUrl, " +
+	    "    review_star      AS reviewStar " +
+	    "FROM review " +
+	    "WHERE review_pk = ?";
 	
 	// 리뷰 페이지네이션 최대 페이지 개수 가져오기
 	private static final String SELECT_ONE_REVIEW_PAGINATION_MAX_PAGES_BY_ITEM_PK_AND_DATA_COUNT =
 		"SELECT CEIL(COUNT(*) / CAST(? AS DECIMAL)) AS maxPages " +
-		"FROM REVIEW " +
-		"WHERE ITEM_PK = ?";
+		"FROM review " +
+		"WHERE item_pk = ?";
 	
     // ==============
  	//   관리자 쿼리문
@@ -129,36 +129,36 @@ public class ReviewRepository {
 	// 특정 회원이 작성한 리뷰 전체 조회
 	private static final String SELECT_ALL_REVIEW_BY_ACCOUNT_PK =
 	    "SELECT " +
-	    "    r.REVIEW_PK        AS reviewPk, " +
-	    "    r.REVIEW_IMAGE_URL AS reviewImageUrl, " +
-	    "    r.REVIEW_DATE      AS reviewDate, " +
-	    "    r.REVIEW_TITLE     AS reviewTitle, " +
-	    "    r.REVIEW_CONTENT   AS reviewContent, " +
-	    "    r.REVIEW_STAR      AS reviewStar, " +
-	    "    i.ITEM_PK          AS itemPk, " +
-	    "    i.ITEM_NAME        AS itemName " +
-	    "FROM REVIEW r " +
-	    "JOIN ITEM i " +
-	    "ON i.ITEM_PK = r.ITEM_PK " +
-	    "WHERE r.ACCOUNT_PK = ? " +
-	    "ORDER BY r.REVIEW_DATE DESC";
+	    "    r.review_pk        AS reviewPk, " +
+	    "    r.review_image_url AS reviewImageUrl, " +
+	    "    r.review_date      AS reviewDate, " +
+	    "    r.review_title     AS reviewTitle, " +
+	    "    r.review_content   AS reviewContent, " +
+	    "    r.review_star      AS reviewStar, " +
+	    "    i.item_pk          AS itemPk, " +
+	    "    i.item_name        AS itemName " +
+	    "FROM review r " +
+	    "JOIN item i " +
+	    "ON i.item_pk = r.item_pk " +
+	    "WHERE r.account_pk = ? " +
+	    "ORDER BY r.review_date DESC";
 
 	
 	// 특정 상품에 달린 리뷰 전부 조회
 	private static final String SELECT_ALL_REVIEW_DATAS_BY_ITEM_PK_ADMIN_VIEW =
 	    "SELECT " +
-	    "    R.REVIEW_PK        AS reviewPk, " +
-	    "    R.REVIEW_IMAGE_URL AS reviewImageUrl, " +
-	    "    R.REVIEW_TITLE     AS reviewTitle, " +
-	    "    R.REVIEW_CONTENT   AS reviewContent, " +
-	    "    R.REVIEW_STAR      AS reviewStar, " +
-	    "    R.ACCOUNT_PK       AS accountPk, " +
-	    "    A.ACCOUNT_NAME     AS reviewAccountName, " +
-	    "    DATE(R.REVIEW_DATE) AS reviewDate " +
-	    "FROM REVIEW R " +
-	    "JOIN ACCOUNT A ON R.ACCOUNT_PK = A.ACCOUNT_PK " +
-	    "WHERE R.ITEM_PK = ? " +
-	    "ORDER BY R.REVIEW_DATE DESC";
+	    "    R.review_pk        AS reviewPk, " +
+	    "    R.review_image_url AS reviewImageUrl, " +
+	    "    R.review_title     AS reviewTitle, " +
+	    "    R.review_content   AS reviewContent, " +
+	    "    R.review_star      AS reviewStar, " +
+	    "    R.account_pk       AS accountPk, " +
+	    "    A.account_name     AS reviewAccountName, " +
+	    "    DATE(R.review_date) AS reviewDate " +
+	    "FROM review R " +
+	    "JOIN account A ON R.account_pk = A.account_pk " +
+	    "WHERE R.item_pk = ? " +
+	    "ORDER BY R.review_date DESC";
 
 	
 	
