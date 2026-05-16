@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Container from "../../components/common/Container";
 import { useAuth } from "../../auth/AuthContext";
 import { getErrorInfo } from "../../lib/error";
-import ornablyAPI, { API_BASE_URL } from "../../lib/api";
+import ornablyAPI, { API_BASE_URL, ornablyBaseAPI } from "../../lib/api";
 import ornably from "../../../images/ornably.png";
 
 export default function LoginPage() {
@@ -43,7 +43,7 @@ export default function LoginPage() {
       body.append("username", username);
       body.append("password", password);
 
-      await ornablyAPI.post("/login", body, {
+      await ornablyBaseAPI.post("/login", body, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
 

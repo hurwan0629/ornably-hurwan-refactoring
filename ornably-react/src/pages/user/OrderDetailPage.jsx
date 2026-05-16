@@ -211,7 +211,7 @@ export default function OrderDetailPage() {
     setLoading(true);
     setErrMsg("");
     try {
-      const res = await ornablyAPI.get("/api/user/orders-item/me", {
+      const res = await ornablyAPI.get("/user/orders-item/me", {
         params: { ordersPk: pk },
       });
 

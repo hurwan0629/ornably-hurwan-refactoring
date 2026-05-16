@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
     console.log("loadMe() 호출");
     setStatus("loading");
     try {
-      const res = await ornablyAPI.get("/api/all/auth/info");
+      const res = await ornablyAPI.get("/all/auth/info");
       // res.data 예: { authenticated: true, role: "USER", ... }
       console.log("/api/me 응답:");
       console.log(res);

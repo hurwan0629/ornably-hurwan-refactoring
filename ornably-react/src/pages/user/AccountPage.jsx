@@ -127,7 +127,7 @@ export default function AccountPage() {
     setLoading(true);
     setErrorMsg("");
     try {
-      const res = await ornablyAPI.get("/api/user/account/mypage");
+      const res = await ornablyAPI.get("/user/account/mypage");
       setAccount(res?.data?.accountData ?? null);
     } catch (err) {
       setAccount(null);

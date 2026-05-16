@@ -101,7 +101,7 @@ export default function AddressCreatePage() {
     setLoading(true);
     try {
       await ornablyAPI.post(
-        "/api/user/address/regist",
+        "/user/address/regist",
         {
           addressName: form.addressName.trim(),
           addressPostalCode: form.addressPostalCode.trim(),

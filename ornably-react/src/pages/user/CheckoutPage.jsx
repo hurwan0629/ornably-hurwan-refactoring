@@ -98,7 +98,7 @@ export default function CheckoutPage() {
         setAddrStatus("loading");
         setErrorMsg("");
 
-        const res = await ornablyAPI.get("/api/user/address/me");
+        const res = await ornablyAPI.get("/user/address/me");
 
         const list = res.data?.addressDatas ?? [];
         if (!alive) return;
@@ -196,14 +196,14 @@ export default function CheckoutPage() {
 
       // 백엔드 주문 확정
       if (source === "cart") {
-        await ornablyAPI.post("/api/user/orders/cart-payment", {
+        await ornablyAPI.post("/user/orders/cart-payment", {
           addressPk: selectedAddressPk,
           ordersImportUid,
           ordersMessage,
         });
       } else {
         console.log(summary?.rows[0]?.unit);
-        await ornablyAPI.post("/api/user/orders/instance-payment", {
+        await ornablyAPI.post("/user/orders/instance-payment", {
           itemPk: instanceItem?.itemPk,
           itemCount: instanceItem?.itemCount,
           itemPrice: summary?.rows[0]?.unit,

@@ -7,6 +7,11 @@ const ornablyAPI = axios.create({
   timeout: 15000,
   withCredentials: true,
 });
+export const ornablyBaseAPI = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: 15000,
+  withCredentials: true,
+});
 
 ornablyAPI.interceptors.request.use((config) => {
   console.log("==================================");

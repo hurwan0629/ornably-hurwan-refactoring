@@ -89,7 +89,7 @@ export default function OrderListPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await ornablyAPI.get("/api/user/orders/me");
+      const res = await ornablyAPI.get("/user/orders/me");
       setOrders(res?.data?.ordersDatas ?? []);
     } catch (err) {
       setOrders([]);
