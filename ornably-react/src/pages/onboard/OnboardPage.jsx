@@ -1,7 +1,7 @@
 // src/pages/onboard/OnboardPage.jsx
 import { useEffect, useMemo, useState } from "react";
 import Container from "../../components/common/Container";
-import { useAuth } from "../../auth/AuthContext"; // 프로젝트 경로에 맞게 유지
+import { useAuth } from "../../auth/useAuth"; // 프로젝트 경로에 맞게 유지
 import ornablyAPI, { API_BASE_URL } from "../../lib/api"
 
 function normalizePhone11(v) {

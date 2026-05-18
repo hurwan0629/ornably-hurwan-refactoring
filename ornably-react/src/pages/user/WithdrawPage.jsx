@@ -1,7 +1,7 @@
 ﻿// src/pages/user/WithdrawPage.jsx
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../auth/AuthContext"; // 프로젝트 경로에 맞게 수정
+import { useAuth } from "../../auth/useAuth"; // 프로젝트 경로에 맞게 수정
 import ConfirmModal from "../../components/common/ConfirmModal";
 import ornablyAPI from "../../lib/api";
 

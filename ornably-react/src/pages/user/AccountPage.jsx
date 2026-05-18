@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FiHeart, FiShoppingCart, FiStar, FiList, FiMapPin, FiLogOut} from "react-icons/fi";
 
 import Container from "../../components/common/Container";
-import { useAuth } from "../../auth/AuthContext"
+import { useAuth } from "../../auth/useAuth"
 import ornablyAPI from "../../lib/api";
 
 /* ===================== utils ===================== */

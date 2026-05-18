@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ornablyAPI from "../../lib/api";
 import Container from "../../components/common/Container";
-import { useAuth } from "../../auth/AuthContext"; // ✅ 프로젝트에 맞게 경로 조정
+import { useAuth } from "../../auth/useAuth"; // ✅ 프로젝트에 맞게 경로 조정
 
 /* ===================== utils ===================== */
 function cx(...classes) {

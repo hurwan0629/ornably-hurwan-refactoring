@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Container from "../../components/common/Container";
-import { useAuth } from "../../auth/AuthContext";
+import { useAuth } from "../../auth/useAuth";
 import { getErrorInfo } from "../../lib/error";
 import ornablyAPI, { API_BASE_URL, ornablyBaseAPI } from "../../lib/api";
 import ornably from "../../../images/ornably.png";

@@ -1,6 +1,6 @@
 // src/components/common/Header.jsx
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../auth/AuthContext";
+import { useAuth } from "../../auth/useAuth";
 import { useMemo } from "react";
 import logo from "../../../images/logo.png";
 import { API_BASE_URL } from "../../lib/api";

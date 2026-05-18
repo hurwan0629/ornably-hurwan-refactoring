@@ -48,7 +48,7 @@ import Forbidden403 from "../pages/error/403";
 import RootError from "../pages/error/errorElement"
 
 // ✅ 여기만 바뀜
-import Guard from "../auth/Gaurd";
+import Guard from "../auth/Guard";
 
 
 export const router = createBrowserRouter([

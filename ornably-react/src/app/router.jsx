@@ -39,7 +39,7 @@ import Forbidden403 from "../pages/error/403";
 import NotFound404 from "../pages/error/404";
 import RootError from "../pages/error/errorElement";
 
-import Guard from "../auth/Gaurd";
+import Guard from "../auth/Guard";
 import { ACCESS } from "../auth/routeAccess";
 import GuestLayout from "../layouts/GuestLayout";
 

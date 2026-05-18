@@ -17,7 +17,7 @@ services:
       - ../data:/var/lib/mysql
       - ../../src/main/resources/SQL/1_schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
       - ../../src/main/resources/SQL/2_sample.sql:/docker-entrypoint-initdb.d/02-sample-data.sql:ro
-      - ../../src/main/resources/SQL/3_account_sample.sql:/docker-entrypoint-initdb.d/03-account-sample.sql:ro
+      - ../.. /src/main/resources/SQL/3_account_sample.sql:/docker-entrypoint-initdb.d/03-account-sample.sql:ro
       - ../../src/main/resources/SQL/4_item_sample.sql:/docker-entrypoint-initdb.d/04-item-sample.sql:ro
       - ../../src/main/resources/SQL/5_event_sample.sql:/docker-entrypoint-initdb.d/05-event-sample.sql:ro
       - ../../src/main/resources/SQL/6_order_sample.sql:/docker-entrypoint-initdb.d/06-order-sample.sql:ro

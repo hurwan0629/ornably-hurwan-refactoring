@@ -1,7 +1,7 @@
 // src/pages/403.jsx
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../auth/AuthContext"; // ✅ 너 프로젝트 경로에 맞게 조정
+import { useAuth } from "../../auth/useAuth"; // ✅ 너 프로젝트 경로에 맞게 조정
 
 export default function Forbidden403() {
   const navigate = useNavigate();

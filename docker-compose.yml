@@ -1,0 +1,100 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ornably-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+09:00
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./SQL/1_schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./SQL/2_sample.sql:/docker-entrypoint-initdb.d/02-sample-data.sql:ro
+      - ./SQL/3_account_sample.sql:/docker-entrypoint-initdb.d/03-account-sample.sql:ro
+      - ./SQL/4_item_sample.sql:/docker-entrypoint-initdb.d/04-item-sample.sql:ro
+      - ./SQL/5_event_sample.sql:/docker-entrypoint-initdb.d/05-event-sample.sql:ro
+      - ./SQL/6_order_sample.sql:/docker-entrypoint-initdb.d/06-order-sample.sql:ro
+      - ./SQL/7_user_item_sample.sql:/docker-entrypoint-initdb.d/07-user-item-sample.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u${DB_USERNAME} -p${DB_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    networks:
+      - ornably-net
+
+  redis:
+    image: redis:7
+    container_name: ornably-redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - ornably-net
+
+  app:
+    image: hurwan0629/ornably-backend:latest
+    container_name: ornably-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${DB_DATABASE}?${DB_OPTIONS}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN}
+      SERVER_ORIGIN: ${SERVER_ORIGIN}
+
+      RESOURCE_PATH: ${RESOURCE_PATH}
+
+      SOLAPI_FROM_NUMBER: ${SOLAPI_FROM_NUMBER}
+      BREVO_SENDER_EMAIL: ${BREVO_SENDER_EMAIL}
+      PORTONE_V2_API_SECRET: ${PORTONE_V2_API_SECRET}
+      BREVO_API_KEY: ${BREVO_API_KEY}
+      SOLAPI_API_KEY: ${SOLAPI_API_KEY}
+      SOLAPI_API_SECRET: ${SOLAPI_API_SECRET}
+      OAUTH2_GOOGLE_CLIENT_ID: ${OAUTH2_GOOGLE_CLIENT_ID}
+      OAUTH2_GOOGLE_CLIENT_SECRET: ${OAUTH2_GOOGLE_CLIENT_SECRET}
+      OAUTH2_KAKAO_CLIENT_ID: ${OAUTH2_KAKAO_CLIENT_ID}
+      OAUTH2_NAVER_CLIENT_ID: ${OAUTH2_NAVER_CLIENT_ID}
+      OAUTH2_NAVER_CLIENT_SECRET: ${OAUTH2_NAVER_CLIENT_SECRET}
+    volumes:
+      - ./resources:${RESOURCE_PATH}
+    ports:
+      - "8080:8080"
+    networks:
+      - ornably-net
+
+  frontend:
+    image: hurwan0629/ornably-frontend:latest
+    container_name: ornably-frontend
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    networks:
+      - ornably-net
+
+volumes:
+  mysql_data:
+
+networks:
+  ornably-net:
